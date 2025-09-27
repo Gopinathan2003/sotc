@@ -1,5 +1,6 @@
 import React from 'react';
 import logo from '../logo.svg';
+import Dataset from './datalist';
 import '../App.css';
 
 function FirstPage() {
@@ -33,6 +34,7 @@ function FirstPage() {
           ))}
         </div>
       </main>
+      <Dataset />
     </div>
   );
 }
