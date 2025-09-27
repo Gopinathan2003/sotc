@@ -4,7 +4,7 @@ import { PlusOutlined, EditOutlined, DeleteOutlined } from "@ant-design/icons";
 
 const Dataset = () => {
   const [data, setData] = useState([
-    { key: "1", community: "John Doe", email: "john@example.com" },
+    { key: "1", community: "Build2learn", email: "john@example.com" },
     { key: "2", community: "Jane Smith", email: "jane@example.com" },
   ]);
   const [searchText, setSearchText] = useState("");
