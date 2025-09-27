@@ -15,7 +15,6 @@ function FirstPage() {
   return (
     <div className="App">
       <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
         <h1>Welcome to Tamil Nadu</h1>
         <p className="App-description">
           Explore the beautiful districts of Tamil Nadu, each with its own unique culture, 
