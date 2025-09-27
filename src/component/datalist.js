@@ -1,16 +1,44 @@
 import React, { useState } from "react";
-import { Table, Input, Button, Space, Modal, Form } from "antd";
+import { Table, Input, Button, Space, Modal, Form, Select } from "antd";
 import { PlusOutlined, EditOutlined, DeleteOutlined } from "@ant-design/icons";
 
 const Dataset = () => {
-  const [data, setData] = useState([
-    { key: "1", community: "Build2learn", email: "john@example.com" },
-    { key: "2", community: "Jane Smith", email: "jane@example.com" },
-  ]);
+  const [data, setData] = useState([]);
   const [searchText, setSearchText] = useState("");
   const [isModalVisible, setIsModalVisible] = useState(false);
   const [editingRecord, setEditingRecord] = useState(null);
   const [form] = Form.useForm();
+
+  const tamilnaduDistricts = [
+    { label: "Chennai", value: "Chennai" },
+    { label: "Coimbatore", value: "Coimbatore" },
+    { label: "Madurai", value: "Madurai" },
+    { label: "Salem", value: "Salem" },
+    { label: "Tiruchirappalli", value: "Tiruchirappalli" },
+  ];
+
+  const colleges = [
+    { label: "Anna University", value: "Anna University" },
+    { label: "PSG College", value: "PSG College" },
+    { label: "Madras Medical College", value: "MMC" },
+  ];
+
+  const schools = [
+    { label: "DAV School", value: "DAV" },
+    { label: "Velammal School", value: "Velammal" },
+    { label: "Kendriya Vidyalaya", value: "KV" },
+  ];
+
+  const labList = [
+    { label: "Physics Lab", value: "Physics Lab" },
+    { label: "Chemistry Lab", value: "Chemistry Lab" },
+    { label: "Computer Lab", value: "Computer Lab" },
+  ];
+
+  const linuxOptions = [
+    { label: "Yes", value: "Yes" },
+    { label: "No", value: "No" },
+  ];
 
   // Handle Add/Edit
   const showModal = (record = null) => {
@@ -47,13 +75,17 @@ const Dataset = () => {
   };
 
   const filteredData = data.filter(item =>
-    item.name.toLowerCase().includes(searchText.toLowerCase()) ||
-    item.email.toLowerCase().includes(searchText.toLowerCase())
+    item.districts?.toLowerCase().includes(searchText.toLowerCase()) ||
+    item.type?.toLowerCase().includes(searchText.toLowerCase())
   );
 
   const columns = [
-    { title: "Name", dataIndex: "name", key: "name" },
-    { title: "Email", dataIndex: "email", key: "email" },
+    { title: "District", dataIndex: "districts", key: "districts" },
+    { title: "Type", dataIndex: "type", key: "type" },
+    { title: "College/School", dataIndex: "institute", key: "institute" },
+    { title: "Lab", dataIndex: "lab", key: "lab" },
+    { title: "Linux User", dataIndex: "linux", key: "linux" },
+    { title: "Percentage", dataIndex: "percentage", key: "percentage" },
     {
       title: "Actions",
       key: "actions",
@@ -98,11 +130,61 @@ const Dataset = () => {
         onCancel={() => setIsModalVisible(false)}
       >
         <Form form={form} layout="vertical">
-          <Form.Item name="name" label="Name" rules={[{ required: true }]}>
-            <Input />
+          {/* District */}
+          <Form.Item name="districts" label="District" rules={[{ required: true }]}>
+            <Select
+              showSearch
+              placeholder="Select District"
+              options={tamilnaduDistricts}
+            />
           </Form.Item>
-          <Form.Item name="email" label="Email" rules={[{ required: true, type: "email" }]}>
-            <Input />
+
+          {/* College / School */}
+          <Form.Item name="type" label="College or School" rules={[{ required: true }]}>
+            <Select
+              placeholder="Select Type"
+              options={[
+                { label: "College", value: "College" },
+                { label: "School", value: "School" }
+              ]}
+            />
+          </Form.Item>
+
+          {/* Conditional Fields */}
+          <Form.Item shouldUpdate={(prev, curr) => prev.type !== curr.type}>
+            {({ getFieldValue }) =>
+              getFieldValue("type") === "College" ? (
+                <>
+                  <Form.Item name="institute" label="College" rules={[{ required: true }]}>
+                    <Select placeholder="Select College" options={colleges} />
+                  </Form.Item>
+                  <Form.Item name="lab" label="Lab" rules={[{ required: true }]}>
+                    <Select placeholder="Select Lab" options={labList} />
+                  </Form.Item>
+                  <Form.Item name="linux" label="Linux User" rules={[{ required: true }]}>
+                    <Select placeholder="Yes / No" options={linuxOptions} />
+                  </Form.Item>
+                  <Form.Item name="percentage" label="Percentage" rules={[{ required: true }]}>
+                    <Input type="number" placeholder="Enter %" />
+                  </Form.Item>
+                </>
+              ) : getFieldValue("type") === "School" ? (
+                <>
+                  <Form.Item name="institute" label="School" rules={[{ required: true }]}>
+                    <Select placeholder="Select School" options={schools} />
+                  </Form.Item>
+                  <Form.Item name="lab" label="Lab" rules={[{ required: true }]}>
+                    <Select placeholder="Select Lab" options={labList} />
+                  </Form.Item>
+                  <Form.Item name="linux" label="Linux User" rules={[{ required: true }]}>
+                    <Select placeholder="Yes / No" options={linuxOptions} />
+                  </Form.Item>
+                  <Form.Item name="percentage" label="Percentage" rules={[{ required: true }]}>
+                    <Input type="number" placeholder="Enter %" />
+                  </Form.Item>
+                </>
+              ) : null
+            }
           </Form.Item>
         </Form>
       </Modal>
